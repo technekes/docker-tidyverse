@@ -23,9 +23,14 @@ RUN \
     selectr \
     noncensus \
     jsonlite \
+    networkD3 \
+    kable \
+    kableExtra \
+    formattable \
   && \
   R -e 'devtools::install_github("jennybc/googlesheets")' && \
-  R -e 'devtools::install_github("cloudyr/aws.s3")'
+  R -e 'devtools::install_github("cloudyr/aws.s3")' && \
+  R -e 'devtools::install_github("yihui/xaringan")'
 
 RUN export ADD=shiny && \
   bash /etc/cont-init.d/add
