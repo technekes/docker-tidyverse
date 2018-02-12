@@ -24,7 +24,6 @@ RUN \
     noncensus \
     jsonlite \
     networkD3 \
-    kable \
     kableExtra \
     formattable \
   && \
