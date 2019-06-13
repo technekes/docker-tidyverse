@@ -1,19 +1,12 @@
 FROM rocker/geospatial:latest
-MAINTAINER Jack Ross <jack.ross@technekes.com>
+LABEL author="Jack Ross <jack.ross@technekes.com>"
 
-# optional: for unixODBC development headers
 RUN apt-get update && \
-  apt-get install -y apt-utils && \
-  apt-get install -y unixodbc-dev odbc-postgresql
-
-# using steps and code oulined by Steph Locke <steph@itsalocke.com>
-RUN git clone https://github.com/lockedata/DOCKER-rmssql.git && \
-  cd DOCKER-rmssql/ && \
-  cp sampleSQL.r /etc/skel/ && \
-  apt-get install -y apt-transport-https gnupg && \
-  chmod 777 ./odbcinstall.sh && \
-  ./odbcinstall.sh && \
-  R -e 'devtools::install_github("lockedata/DOCKER-rmssql")'
+  apt-get install -y apt-utils curl gnupg gnupg2 gnupg1 apt-transport-https ca-certificates && \
+  curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+  curl https://packages.microsoft.com/config/debian/9/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
+  sudo apt-get update && \
+  ACCEPT_EULA=Y apt-get -y install msodbcsql17
 
 RUN \
   install2.r --error \
@@ -26,6 +19,7 @@ RUN \
     networkD3 \
     kableExtra \
     formattable \
+    lubridate \
   && \
   R -e 'devtools::install_github("jennybc/googlesheets")' && \
   R -e 'devtools::install_github("cloudyr/aws.s3")' && \
